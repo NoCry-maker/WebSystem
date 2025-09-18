@@ -1,6 +1,5 @@
 @extends('layouts.app')
-@section('no-header')
-@endsection
+
 @section('content')
     <div class="container py-36">
         <div class="row justify-content-center">

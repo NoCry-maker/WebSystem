@@ -1,6 +1,5 @@
 @extends('layouts.app')
-@section('no-header')
-@endsection
+
 @section('content')
     <div class="py-20 min-w-lg min-w-48 mx-auto text-center bg-white px-4 sm:px-8 rounded-xl shadow mt-5">
         <header class="mb-8">

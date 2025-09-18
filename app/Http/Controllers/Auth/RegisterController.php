@@ -65,16 +65,25 @@ class RegisterController extends Controller
     //         'password' => ['required', 'string', 'min:8',],
     //     ]);
     // }
-    protected function validator(array $data)
+    // protected function validator(array $data)
+    // {
+    //     return Validator::make($data, [
+    //         // 'name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    //         // 'mobile' => ['required', 'regex:/^(09\d{9}|\+639\d{9})$/', 'unique:users'],
+    //         'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',],
+    //     ],[
+    //     'password.regex' => 'At least 8 characters long, contain at least one letter and one number.',
+    // ]);
+    // }
+      protected function validator(array $data)
     {
         return Validator::make($data, [
             // 'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             // 'mobile' => ['required', 'regex:/^(09\d{9}|\+639\d{9})$/', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',],
-        ],[
-        'password.regex' => 'At least 8 characters long, contain at least one letter and one number.',
-    ]);
+            'password' => ['required', 'string', 'min:8'],
+        ]);
     }
 
         public function register(Request $request)
