@@ -41,7 +41,7 @@ class ForgotPasswordController extends Controller
 Session::put('otp_active', true);
 Session::put('otp_expires_at', now()->addSeconds(60));
 
-        Mail::to($request->email)->send(new forgotpassword_mail($otp));
+        Mail::to($request->email)->send(new SendForgotPasswordEmailOtp($otp));
 
         return redirect()->route('otp.verify.form')->with('status', 'Your verification code is sent to your email.');
     }
@@ -139,7 +139,7 @@ public function resendOtp(Request $request)
     Session::put('otp_active', true);
     Session::put('otp_expires_at', now()->addSeconds(60));
 
-    Mail::to($email)->send(new forgotpassword_mail($record->otp));
+    Mail::to($email)->send(new SendForgotPasswordEmailOtp($record->otp));
 
     return redirect()->back()->with('status', 'Code resent and is now active.');
 }

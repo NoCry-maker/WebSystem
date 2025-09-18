@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('name')
-    <div class="py-20 min-w-lg min-w-48 mx-auto text-center bg-white px-4 sm:px-8 rounded-xl shadow mt-5">
+@section('content')
+
+    <div class=" h-100vh min-w-lg min-w-48 mx-auto text-center bg-white px-4 sm:px-8 rounded-xl shadow mt-5">
         <header class="mb-8">
             <h1 class="text-2xl font-bold mb-1">Enter Verification Code</h1>
         </header>

@@ -9,7 +9,7 @@
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Bankero and Fishermen Association">
     <meta name="author" content="p-themes">
-
+  @vite('resources/css/app.css')
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('new-assets/images/icons/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32"
@@ -370,7 +370,6 @@
                                         role="tab" aria-controls="register" aria-selected="false">Register</a>
                                 </li>
                             </ul>
-   @yield('name')
                             <div class="tab-content" id="tab-content-5">
                                 <!-- Sign In Tab -->
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel"
