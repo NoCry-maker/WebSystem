@@ -4,6 +4,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReviewReactionController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\AuthAdmin;
@@ -25,9 +27,36 @@ use Termwind\Components\Hr;
 
 Auth::routes();
 
+
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\Auth\RegisterController;
+
+Route::get('/verify-register-otp', [OtpController::class, 'showVerifyRegisterForm'])->name('otp.verify.page');
+Route::post('/verify-register-otp', [OtpController::class, 'verifyRegisterOtp'])->name('otp.verify');
+
+Route::post('otp/resend/register', [OtpController::class, 'resendRegisterOtp'])->name('otp.resend.register');
+//
+use App\Http\Controllers\ForgotPasswordController;
+
+Route::post('/otp/resend', [ForgotPasswordController::class, 'resendOtp'])->name('otp.resend');
+// Submit Email
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showEmailForm'])->name('otp.password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('otp.password.email');
+
+// Verify OTP
+Route::get('/verify-otp', [ForgotPasswordController::class, 'showOtpForm'])->name('otp.verify.form');
+Route::post('/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('otp.verify.submit');
+
+// Reset Password
+Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('otp.reset.form');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('otp.password.update');
+
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop',[ShopController::class,'index'])->name('shop.index');
 Route::get('/shop/{product_slug}',[ShopController::class,'product_details'])->name('shop.product.details');
+Route::get('/product/{slug}', [ShopController::class, 'show'])->name('product.details');
+
+
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 Route::get('/cart',[CartController::class,'index'])->name('cart.index');
@@ -36,6 +65,7 @@ Route::put('/cart/increase-quantity/{rowId}',[CartController::class,'increase_ca
 Route::put('/cart/decrease-quantity/{rowId}',[CartController::class,'decrease_cart_quantity'])->name('cart.qty.decrease');
 Route::delete('/cart/remove/{rowId}',[CartController::class,'remove_item'])->name('cart.item.remove');
 Route::delete('/cart/clear',[CartController::class,'empty_cart'])->name('cart.empty');
+Route::put('/cart/update/{rowId}', [CartController::class, 'update'])->name('cart.update');
 
 Route::post('/cart/apply-coupon',[CartController::class,'apply_coupon_code'])->name('cart.coupon.apply');
 Route::delete('/cart/remove-coupon',[CartController::class,'remove_coupon_code'])->name('cart.coupon.remove');
@@ -55,6 +85,9 @@ Route::get('/contact-us',[HomeController::class,'contact'])->name('home.contact'
 Route::post('/contact/store',[HomeController::class,'contact_store'])->name('home.contact.store');
 
 Route::get('/search',[HomeController::class,'search'])->name('home.search');
+Route::get('/search', [App\Http\Controllers\ShopController::class, 'search'])->name('shop.search');
+
+
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/account-dashboard', [UserController::class, 'index'])->name('user.index');
@@ -112,6 +145,17 @@ Route::middleware(['auth', AuthAdmin::class])->group(function(){
 
     Route::get('/admin/order', [AdminController::class,'order_tracking'])->name('admin.order');
 
+    Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
 
+});
 
+Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+Route::post('/review/{product_id}', [ReviewController::class, 'store'])->name('review.store');
+
+Route::post('/reviews/{review}/react', [ReviewReactionController::class, 'react'])->name('reviews.react')->middleware('auth');
+
+Route::middleware(['auth'])->prefix('reviews')->name('reviews.')->group(function () {
+    Route::get('{review}/edit', [ReviewController::class, 'edit'])->name('edit');
+    Route::put('{review}', [ReviewController::class, 'update'])->name('update');
+    Route::delete('{review}', [ReviewController::class, 'destroy'])->name('delete');
 });

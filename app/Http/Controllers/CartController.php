@@ -256,4 +256,26 @@ class CartController extends Controller
         }
         return redirect()->route('cart.index');
     }
+
+public function update(Request $request, $rowId)
+{
+    $item = Cart::instance('cart')->get($rowId);
+
+    // Always start from current cart qty
+    $quantity = $item->qty;
+
+    if ($request->action === 'increase') {
+        $quantity++;
+    } elseif ($request->action === 'decrease' && $quantity > 1) {
+        $quantity--;
+    } else {
+        // If user typed a number manually in the input
+        $quantity = (int) $request->input('quantity', $quantity);
+    }
+
+    Cart::instance('cart')->update($rowId, $quantity);
+
+    return back()->with('success', '');
+}
+
 }

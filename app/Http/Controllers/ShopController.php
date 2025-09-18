@@ -11,7 +11,7 @@ class ShopController extends Controller
 {
     public function index(Request $request)
     {
-        $size = (int) $request->query('size') ? $request->query('size') : 12;
+        $size = (int) $request->query('size') ? $request->query('size') : 8;
         $o_column = '';
         $o_order = '';
         $order = (int) $request->query('order') ? $request->query('order') : -1;
@@ -42,22 +42,21 @@ class ShopController extends Controller
         }
         $brands = Brand::withCount('products')->orderBy('name', 'ASC')->get();
 
-        $categories = Category::orderBy('name','ASC')->get();
+        $categories = Category::orderBy('name', 'ASC')->get();
 
         $products = Product::when($f_brands, function ($query) use ($f_brands) {
             $query->whereIn('brand_id', explode(',', $f_brands));
         })
-        ->when($f_categories, function ($query) use ($f_categories) {
-            $query->whereIn('category_id', explode(',', $f_categories));
-        })
-        ->where(function($query) use($min_price,$max_price){
-            $query->whereBetween ('regular_price',[$min_price,$max_price])
-            ->orWhereBetween('sale_price',[$min_price,$max_price]);
-        })
+            ->when($f_categories, function ($query) use ($f_categories) {
+                $query->whereIn('category_id', explode(',', $f_categories));
+            })
+            ->where(function ($query) use ($min_price, $max_price) {
+                $query->whereBetween('regular_price', [$min_price, $max_price])->orWhereBetween('sale_price', [$min_price, $max_price]);
+            })
             ->orderBy($o_column, $o_order)
             ->paginate($size);
 
-        return view('shop', compact('products', 'size', 'order', 'brands', 'f_brands','categories','f_categories', 'min_price','max_price'));
+        return view('shop', compact('products', 'size', 'order', 'brands', 'f_brands', 'categories', 'f_categories', 'min_price', 'max_price'));
     }
 
     public function product_details($product_slug)
@@ -66,4 +65,31 @@ class ShopController extends Controller
         $rproducts = Product::where('slug', '<>', $product_slug)->get()->take(8);
         return view('details', compact('product', 'rproducts'));
     }
+    public function show($slug)
+    {
+        $product = Product::where('slug', $slug)->firstOrFail();
+
+        // Fetch random products, excluding the one being viewed
+       $rproducts = Product::where('id', '!=', $product->id)
+    ->inRandomOrder()
+    ->take(8)
+    ->get();
+
+
+        return view('shop.product-details', compact('product', 'rproducts'));
+    }
+    public function search(Request $request)
+{
+    $query = $request->input('q');
+
+    $products = Product::where('name', 'like', '%' . $query . '%')
+        ->orWhere('description', 'like', '%' . $query . '%')
+        ->paginate(12);
+
+    return view('shop.search', [
+        'products' => $products,
+        'query' => $query
+    ]);
+}
+
 }
