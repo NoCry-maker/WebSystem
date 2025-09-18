@@ -370,7 +370,7 @@
                                         role="tab" aria-controls="register" aria-selected="false">Register</a>
                                 </li>
                             </ul>
-
+   @yield('name')
                             <div class="tab-content" id="tab-content-5">
                                 <!-- Sign In Tab -->
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel"

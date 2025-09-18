@@ -39,7 +39,7 @@ class SendRegisterOtpMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.register_email.otp',
+            view: 'email.register_email_otp',
             with: [
                 'otp' => $this->otp,
             ],

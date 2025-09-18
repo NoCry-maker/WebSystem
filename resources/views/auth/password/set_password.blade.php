@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 
-@section('content')
+@section('name')
     <div class="container py-36">
         <div class="row justify-content-center">
             <div class="col-md-8">
