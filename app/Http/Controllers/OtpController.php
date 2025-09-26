@@ -15,10 +15,24 @@ use Illuminate\Support\Facades\Hash;
 
 class OtpController extends Controller
 {
+    // public function showVerifyRegisterForm()
+    // {
+    //     return view('auth.verify-otp');
+    // }
     public function showVerifyRegisterForm()
-    {
-        return view('auth.verify-otp');
+{
+    $expiresAt = Session::get('otp_expires_at');
+    $remaining = 0;
+
+    if ($expiresAt) {
+        $remaining = now()->lt($expiresAt) ? intval(now()->diffInSeconds($expiresAt, false)) : 0;
     }
+
+    return view('auth.verify-otp', [
+        'remaining' => $remaining,
+    ]);
+}
+
 
     public function verifyRegisterOtp(Request $request)
     {
@@ -66,7 +80,7 @@ if (!$otpActive || now()->gt($otpExpiresAt)) {
             'name'     => $name,
             'email'    => $email,
             // 'mobile'   => $mobile,
-            'password' => Hash::make($password),
+            'password' => $password,
         ]);
 
         // Delete OTP record

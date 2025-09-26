@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use App\Mail\SendForgotPasswordEmailOtp;
+use App\Mail\SendForgotPasswordMailOtp;
 use App\Mail\SendRegisterOtpMail;
 use App\Models\ForgotPasswordEmailOtp;
 use App\Models\RegisterEmailOtp;
+
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -41,15 +42,28 @@ class ForgotPasswordController extends Controller
 Session::put('otp_active', true);
 Session::put('otp_expires_at', now()->addSeconds(60));
 
-        Mail::to($request->email)->send(new SendForgotPasswordEmailOtp($otp));
+        Mail::to($request->email)->send(new SendForgotPasswordMailOtp($otp));
 
         return redirect()->route('otp.verify.form')->with('status', 'Your verification code is sent to your email.');
     }
 
+    // public function showOtpForm()
+    // {
+    //     return view('auth.password.otp_verification'); // View: enter OTP
+    // }
     public function showOtpForm()
-    {
-        return view('auth.password.otp_verification'); // View: enter OTP
+{
+    $expiresAt = Session::get('otp_expires_at');
+    $remaining = 0;
+
+    if ($expiresAt) {
+        $remaining = now()->lt($expiresAt) ? intval(now()->diffInSeconds($expiresAt, false)) : 0;
     }
+
+    return view('auth.password.otp_verification', [
+        'remaining' => $remaining,
+    ]);
+}
 
     public function verifyOtp(Request $request)
 {
@@ -114,7 +128,7 @@ Session::forget('otp_expires_at');
         ForgotPasswordEmailOtp::where('email', $user->email)->delete();
         Session::forget(['otp_verified', 'reset_email']);
 
-        return redirect()->route('login')->with('status', 'Password has been reset successfully.');
+        return redirect()->route('home.index')->with('status', 'Password has been reset successfully.');
     }
 
 public function resendOtp(Request $request)
@@ -139,7 +153,7 @@ public function resendOtp(Request $request)
     Session::put('otp_active', true);
     Session::put('otp_expires_at', now()->addSeconds(60));
 
-    Mail::to($email)->send(new SendForgotPasswordEmailOtp($record->otp));
+    Mail::to($email)->send(new SendForgotPasswordMailOtp($record->otp));
 
     return redirect()->back()->with('status', 'Code resent and is now active.');
 }

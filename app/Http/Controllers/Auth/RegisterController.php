@@ -56,26 +56,6 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    // protected function validator(array $data)
-    // {
-    //     return Validator::make($data, [
-    //         // 'name' => ['required', 'string', 'max:255'],
-    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-    //         // 'mobile' => ['required', 'digits:11', 'unique:users'],
-    //         'password' => ['required', 'string', 'min:8',],
-    //     ]);
-    // }
-    // protected function validator(array $data)
-    // {
-    //     return Validator::make($data, [
-    //         // 'name' => ['required', 'string', 'max:255'],
-    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-    //         // 'mobile' => ['required', 'regex:/^(09\d{9}|\+639\d{9})$/', 'unique:users'],
-    //         'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',],
-    //     ],[
-    //     'password.regex' => 'At least 8 characters long, contain at least one letter and one number.',
-    // ]);
-    // }
       protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -133,15 +113,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    // protected function create(array $data)
-    // {
-    //     return User::create([
-    //         'name' =>'user_'. Str::random(6),
-    //         'email' => $data['email'],
-    //         // 'mobile' => $data['mobile'],
-    //         'password' => Hash::make($data['password']),
-    //     ]);
-    // }
+
         public function createUserAfterOtp()
     {
         $user = User::create([

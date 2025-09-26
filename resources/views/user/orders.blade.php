@@ -33,16 +33,16 @@
             color: #000;
         }
     </style>
-    <main class="pt-90" style="padding-top: 0px;">
-        <div class="mb-4 pb-4"></div>
-        <section class="my-account container">
-            <h2 class="page-title">Orders</h2>
+    <main class="pt-90 bg-white" style="padding-top: 0px;">
+        <div class="mb-2 pb-2"></div>
+        <section class="my-account container bg-white pb-2">
+            <h4 class="page-title py-3">Orders</h4>
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-lg-2  px-6">
                     @include('user.account-nav')
                 </div>
 
-                <div class="col-lg-10">
+                <div class="col-lg-10 shadow-sm">
                     <div class="wg-table table-all-user">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered">

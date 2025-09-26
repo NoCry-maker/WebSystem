@@ -178,8 +178,7 @@
                         </div>
                     </div>
                     <div class="section-content-right">
-
-                        <div class="header-dashboard">
+                        <div class="header-dashboard ">
                             <div class="wrap">
                                 <div class="header-left">
                                     <a href="index-2.html">
@@ -190,8 +189,6 @@
                                     <div class="button-show-hide">
                                         <i class="icon-menu-left"></i>
                                     </div>
-
-
                                     <form class="form-search flex-grow">
                                         <fieldset class="name">
                                             <input type="text" placeholder="Search here..." class="show-search" name="name" id="search-input" tabindex="2" value="" aria-required="true" required="" autocomplete="off">
@@ -201,11 +198,9 @@
                                         </div>
                                         <div class="box-content-search">
                                             <ul id="box-content-search">
-
                                             </ul>
                                         </div>
                                     </form>
-
                                 </div>
                                 <div class="header-grid">
 
@@ -275,13 +270,9 @@
                                             </ul>
                                         </div>
                                     </div> --}}
-
-
-
-
-                                    <div class="popup-wrap user type-header">
+                                    <div class="popup-wrap user type-header flex">
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            <button class="btn btn-secondary dropdown-toggle " type="button"
                                                 id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="header-user wg-user">
                                                     <span class="image">
@@ -339,17 +330,14 @@
                                             </ul>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                         <div class="main-content">
                             @yield('content')
 
-
-
                             <div class="bottom-page">
-                                <div class="body-text">Copyright © 2025 Duque, Rogelio Angelo V.</div>
+                                <div class="body-text">© {{ date('Y') }} Duque, Rogelio Angelo V.</div>
                             </div>
                         </div>
 

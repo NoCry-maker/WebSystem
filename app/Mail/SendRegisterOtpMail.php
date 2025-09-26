@@ -29,7 +29,7 @@ class SendRegisterOtpMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send Register Otp Mail',
+            subject: ' Register Otp Mail',
         );
     }
 

@@ -9,7 +9,7 @@
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Bankero and Fishermen Association">
     <meta name="author" content="p-themes">
-  @vite('resources/css/app.css')
+    @vite('resources/css/app.css')
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('new-assets/images/icons/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32"
@@ -44,266 +44,28 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
 
-
-
 </head>
-
-
 <body>
+
+    @if (!View::hasSection('no-header'))
+        @include('layouts.header')
+    @endif
     <div class="page-wrapper">
-        <header class="header header-6">
-            <div class="header-top">
-                <div class="container">
-                    <div class="header-left">
-                        <ul class="top-menu top-link-menu d-none d-md-block">
-                            <li>
-                                <a href="#">Links</a>
-                                <ul>
-                                    <li><a href="tel:#"><i class="icon-phone"></i>Call: +0123 456 789</a></li>
-                                </ul>
-                            </li>
-                        </ul><!-- End .top-menu -->
-                    </div><!-- End .header-left -->
-
-                    <div class="header-right">
-                        <div class="social-icons social-icons-color">
-                            <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i
-                                    class="icon-facebook-f"></i></a>
-                            <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i
-                                    class="icon-twitter"></i></a>
-                            <a href="#" class="social-icon social-pinterest" title="Instagram" target="_blank"><i
-                                    class="icon-pinterest-p"></i></a>
-                            <a href="#" class="social-icon social-instagram" title="Pinterest" target="_blank"><i
-                                    class="icon-instagram"></i></a>
-                        </div><!-- End .soial-icons -->
-                        @guest
-                            <ul class="top-menu top-link-menu">
-                                <li>
-                                    <ul>
-
-
-                                        <a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Sign in/Sign
-                                            Up</a>
-
-
-
-                                    </ul>
-                                </li>
-                            </ul>
-                        @else
-                            <div class="header-tools__item hover-container">
-                                <a href="{{ Auth::user()->utype === 'ADM' ? route('admin.index') : route('user.index') }}"
-                                    class="icon-user">
-                                    <span class="pr-6px ">{{ Auth::user()->name }} </span>
-
-                                </a>
-                            </div>
-                        @endguest
-
-                        {{-- <div class="header-dropdown">
-                            <a href="#">USD</a>
-                            <div class="header-menu">
-                                <ul>
-                                    <li><a href="#">Eur</a></li>
-                                    <li><a href="#">Usd</a></li>
-                                </ul>
-                            </div><!-- End .header-menu -->
-                        </div><!-- End .header-dropdown -->
-
-                        <div class="header-dropdown">
-                            <a href="#">Eng</a>
-                            <div class="header-menu">
-                                <ul>
-                                    <li><a href="#">English</a></li>
-                                    <li><a href="#">French</a></li>
-                                    <li><a href="#">Spanish</a></li>
-                                </ul>
-                            </div><!-- End .header-menu -->
-                        </div><!-- End .header-dropdown --> --}}
-                    </div><!-- End .header-right -->
-                </div>
-            </div>
-            <div class="header-middle">
-                <div class="container">
-                    <div class="header-left">
-                        <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
-                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
-                                <div class="header-search-wrapper search-wrapper-wide">
-                                    <label for="q" class="sr-only">Search</label>
-                                    <button class="btn btn-primary" type="submit"><i
-                                            class="icon-search"></i></button>
-                                    <input type="search" class="form-control" name="q" id="q"
-                                        placeholder="Search product ..." required>
-                                </div><!-- End .header-search-wrapper -->
-                            </form>
-                        </div><!-- End .header-search -->
-                    </div>
-                    <div class="header-center">
-                        <a href="{{ route('home.index') }}" class="logo">
-                            <img src="{{ asset('new-assets/images/logo.png') }}" alt="Bankero Association Logo"
-                                width="120" height="20">
-                        </a>
-                    </div><!-- End .header-left -->
-
-                    <div class="header-right">
-
-                        <a href="{{ route('wishlist.index') }}" class=" wishlist-link">
-                            <i class="icon-heart-o"></i>
-                            <span class="wishlist-count">{{ Cart::instance('wishlist')->content()->count() }}</span>
-                            <span class="wishlist-txt">My Wishlist</span>
-                            {{-- @if (Cart::instance('wishlist')->content()->count() > 0)
-                                <span
-                                    class="cart-amount d-block position-absolute js-cart-items-count">{{ Cart::instance('wishlist')->content()->count() }}
-                                </span>
-                            @endif --}}
-                        </a>
-
-
-
-                        <div class="dropdown cart-dropdown">
-
-                            <a href="{{ route('cart.index') }}" class="dropdown-toggle">
-                                <i class="icon-shopping-cart"></i>
-                                <span class="cart-count">{{ Cart::instance('cart')->content()->count() }}</span>
-                                <span class="cart-txt">Cart</span>
-
-                            </a>
-
-
-                        </div><!-- End .cart-dropdown -->
-                    </div>
-                </div><!-- End .container -->
-            </div><!-- End .header-middle -->
-
-            <div class="header-bottom sticky-header">
-                <div class="container">
-                    <div class="header-left">
-                        <nav class="main-nav">
-                            <ul class="menu sf-arrows">
-                                <li class="{{ request()->routeIs('home.index') ? 'active' : '' }}">
-                                    <a href="{{ route('home.index') }}" class="navigation__link">Home</a>
-                                </li>
-                                <li class="{{ request()->routeIs('shop.index') ? 'active' : '' }}">
-                                    <a href="{{ route('shop.index') }}" class="navigation__link">Shop</a>
-                                </li>
-                                <li class="{{ request()->routeIs('cart.index') ? 'active' : '' }}">
-                                    <a href="{{ route('cart.index') }}" class="navigation__link">Cart</a>
-                                </li>
-                                <li class="{{ request()->routeIs('about') ? 'active' : '' }}">
-                                    <a href="{{ route('about') }}" class="navigation__link">About</a>
-                                </li>
-                                <li class="{{ request()->routeIs('home.contact') ? 'active' : '' }}">
-                                    <a href="{{ route('home.contact') }}" class="navigation__link">Contact</a>
-                                </li>
-                            </ul><!-- End .menu -->
-                        </nav><!-- End .main-nav -->
-
-                        <button class="mobile-menu-toggler">
-                            <span class="sr-only">Toggle mobile menu</span>
-                            <i class="icon-bars"></i>
-                        </button>
-                    </div><!-- End .header-left -->
-
-
-                </div><!-- End .container -->
-            </div><!-- End .header-bottom -->
-        </header><!-- End .header -->
 
         {{-- main --}}
-        @yield('content')
+    @yield('content')
         {{-- end main --}}
-
-        <footer class="footer">
-            <div class="footer-middle">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget widget-about">
-                                <h4 class="widget-title">about Bankero and Fishermen Association</h4>
-                                <!-- End .widget-title -->
-                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
-                                    magna eros eu erat. </p>
-
-                                <div class="social-icons">
-                                    <a href="#" class="social-icon" title="Facebook" target="_blank"><i
-                                            class="icon-facebook-f"></i></a>
-                                    <a href="#" class="social-icon" title="Twitter" target="_blank"><i
-                                            class="icon-twitter"></i></a>
-                                    <a href="#" class="social-icon" title="Instagram" target="_blank"><i
-                                            class="icon-instagram"></i></a>
-                                    <a href="#" class="social-icon" title="Youtube" target="_blank"><i
-                                            class="icon-youtube"></i></a>
-                                </div><!-- End .soial-icons -->
-                            </div><!-- End .widget about-widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget">
-                                <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="about.html">About Bankerobay</a></li>
-                                    <li><a href="#">How to shop on Bankerobay</a></li>
-                                    <li><a href="#">FAQ</a></li>
-                                    <li><a href="contact.html">Contact us</a></li>
-                                    <li><a href="login.html">Log in</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget">
-                                <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="#">Payment Methods</a></li>
-                                    <li><a href="#">Money-back guarantee!</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Shipping</a></li>
-                                    <li><a href="#">Terms and conditions</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget">
-                                <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="#">Sign In</a></li>
-                                    <li><a href="cart.html">View Cart</a></li>
-                                    <li><a href="#">My Wishlist</a></li>
-                                    <li><a href="#">Track My Order</a></li>
-                                    <li><a href="#">Help</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-middle -->
-
-            <div class="footer-bottom">
-                <div class="container">
-                    <figure class="footer-payments">
-                        <img src="new-assets/images/payments.png" alt="Payment methods" width="272"
-                            height="20">
-                    </figure><!-- End .footer-payments -->
-                    <img src="new-assets/images/logo.png" alt="Bankero Logo" width="82" height="25">
-                    <p class="footer-copyright">Copyright © 2019 Store. All Rights Reserved.</p>
-                    <!-- End .footer-copyright -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-bottom -->
-        </footer><!-- End .footer -->
+    @if (!View::hasSection('no-footer'))
+            @include('layouts.footer')
+    @endif
 
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
     <!-- Mobile Menu -->
-    <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+    <div class="mobile-menu-overlay "></div><!-- End .mobil-menu-overlay -->
 
-    <div class="mobile-menu-container">
+    <div class="mobile-menu-container ">
         <div class="mobile-menu-wrapper">
             <span class="mobile-menu-close"><i class="icon-close"></i></span>
 
@@ -372,19 +134,55 @@
                             </ul>
                             <div class="tab-content" id="tab-content-5">
                                 <!-- Sign In Tab -->
-                                <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                <div class="tab-pane fade show active " id="signin" role="tabpanel"
                                     aria-labelledby="signin-tab">
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
+
                                         <div class="form-group">
                                             <label for="signin-email">Email </label>
-                                            <input type="email" class="form-control" id="signin-email"
-                                                name="email" required>
+                                            <input type="email"
+                                                class="form-control form-control_gray @error('email') is-invalid @enderror"
+                                                id="signin-email" name="email" required>
+                                            @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
-                                        <div class="form-group">
-                                            <label for="signin-password">Password </label>
-                                            <input type="password" class="form-control" id="signin-password"
-                                                name="password" required>
+
+                                        <!-- Sign In Password -->
+                                        <div class="form-group relative">
+                                            <label for="signin-password">Password</label>
+                                            <input type="password"
+                                                class="form-control form-control_gray @error('password') is-invalid @enderror pr-10 password-input"
+                                                id="signin-password" name="password" required>
+
+                                            <!-- Eye Toggle -->
+                                            <span
+                                                class="toggle-password absolute right-6 top-24 -translate-y-1/2 cursor-pointer text-gray-500">
+                                                <!-- Eye Open -->
+                                                <svg class="eye-open hidden" xmlns="http://www.w3.org/2000/svg"
+                                                    width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path
+                                                        d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z" />
+                                                </svg>
+                                                <!-- Eye Closed -->
+                                                <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg"
+                                                    width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path
+                                                        d="M9.61 9.61C8.05 10.45 7 12.1 7 14C7 16.76 9.24 19 12 19C13.9 19 15.55 17.94 16.39 16.39M21 14C21 9.03 16.97 5 12 5C11.56 5 11.12 5.03 10.70 5.09M3 14C3 11 4.46 8.36 6.71 6.72M3 3L21 21" />
+                                                </svg>
+                                            </span>
+                                            @error('password')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
@@ -393,15 +191,18 @@
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="signin-remember">
-                                                <label class="custom-control-label" for="signin-remember">Remember Me</label>
+                                                <input type="checkbox" class="custom-control-input "
+                                                    id="signin-remember">
+                                                <label class="custom-control-label" for="signin-remember">Remember
+                                                    Me</label>
                                             </div><!-- End .custom-checkbox -->
 
-                                            <a href="{{ route('otp.password.request') }}" class="forgot-link">Forgot Your Password?</a>
+                                            <a href="{{ route('otp.password.request') }}" class="forgot-link">Forgot
+                                                Your Password?</a>
                                         </div>
-
                                     </form>
-                                    <div class="form-choice">
+                                    {{-- third party app --}}
+                                    {{-- <div class="form-choice">
                                         <p class="text-center">or sign in with</p>
                                         <div class="row">
                                             <div class="col-sm-6">
@@ -417,7 +218,7 @@
                                                 </a>
                                             </div><!-- End .col-6 -->
                                         </div><!-- End .row -->
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <!-- Register Tab -->
@@ -426,53 +227,80 @@
                                     <form method="POST" action="{{ route('register') }}">
                                         @csrf
                                         <div class="form-group">
-                                            <label id="email" value="{{ old('email') }}" for="register-email">Email </label>
-                                            <input type="email" class="form-control"
-                                                name="email"placeholder="" required>
+                                            <label id="email" value="{{ old('email') }}"
+                                                for="register-email">Email </label>
+                                            <input type="email" class="form-control form-control_gray @error('email') is-invalid @enderror" name="email"placeholder=""
+                                                required>
+                                            @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
-                                           @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                                        <div class="form-group">
-                                            <label id="password" for="register-password">Password </label>
-                                            <input type="password" class="form-control"
-                                                name="password" required>
+
+                                        <div class="form-group relative">
+                                            <label for="register-password">Password</label>
+                                            <input type="password" class="form-control form-control_gray @error('password') is-invalid @enderror pr-10 password-input"
+                                                id="register-password" name="password" required>
+                                            <!-- Eye Toggle -->
+                                            <span
+                                                class="toggle-password absolute right-6 top-24 -translate-y-1/2 cursor-pointer text-gray-500">
+                                                <!-- Eye Open -->
+                                                <svg class="eye-open hidden" xmlns="http://www.w3.org/2000/svg"
+                                                    width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path
+                                                        d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z" />
+                                                </svg>
+                                                <!-- Eye Closed -->
+                                                <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg"
+                                                    width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path
+                                                        d="M9.61 9.61C8.05 10.45 7 12.1 7 14C7 16.76 9.24 19 12 19C13.9 19 15.55 17.94 16.39 16.39M21 14C21 9.03 16.97 5 12 5C11.56 5 11.12 5.03 10.70 5.09M3 14C3 11 4.46 8.36 6.71 6.72M3 3L21 21" />
+                                                </svg>
+                                            </span>
+                                            @error('password')
+                                                <span class="invalid-feedback " role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
-                                          @error('password')
-                                    <span class="invalid-feedback " role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                                         <div class="form-footer">
+
+
+                                        <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
                                                 <span>SIGN UP</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="register-policy" required>
-                                                <label class="custom-control-label" for="register-policy">I agree to the <a href="#">privacy policy</a> *</label>
+                                                <input type="checkbox" class="custom-control-input"
+                                                    id="register-policy" required>
+                                                <label class="custom-control-label" for="register-policy">I agree to
+                                                    the <a href="#">privacy policy</a> *</label>
                                             </div><!-- End .custom-checkbox -->
                                         </div>
-                                        <div class="form-choice">
-                                        <p class="text-center">or Register with</p>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-g">
-                                                    <i class="icon-google"></i>
-                                                    Login With Google
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login  btn-f">
-                                                    <i class="icon-facebook-f"></i>
-                                                    Login With Facebook
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                        </div><!-- End .row -->
-                                    </div>
+                                        {{-- third party app --}}
+                                        {{-- <div class="form-choice">
+                                            <p class="text-center">or Register with</p>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <a href="#" class="btn btn-login btn-g">
+                                                        <i class="icon-google"></i>
+                                                        Login With Google
+                                                    </a>
+                                                </div><!-- End .col-6 -->
+                                                <div class="col-sm-6">
+                                                    <a href="#" class="btn btn-login  btn-f">
+                                                        <i class="icon-facebook-f"></i>
+                                                        Login With Facebook
+                                                    </a>
+                                                </div><!-- End .col-6 -->
+                                            </div><!-- End .row -->
+                                        </div> --}}
                                     </form>
                                 </div>
                             </div>
@@ -483,7 +311,33 @@
         </div><!-- End .modal-dialog -->
     </div>
 
+    {{-- @if ($errors->any())
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var modal = new bootstrap.Modal(document.getElementById('signin-modal'));
+                modal.show();
+            });
+        </script>
+    @endif --}}
 
+
+    {{-- eye toggle --}}
+    <script>
+        document.querySelectorAll(".toggle-password").forEach(toggle => {
+            toggle.addEventListener("click", () => {
+                const input = toggle.parentElement.querySelector(".password-input");
+                const eyeOpen = toggle.querySelector(".eye-open");
+                const eyeClosed = toggle.querySelector(".eye-closed");
+
+                const isPassword = input.getAttribute("type") === "password";
+                input.setAttribute("type", isPassword ? "text" : "password");
+
+                eyeOpen.classList.toggle("hidden", !isPassword);
+                eyeClosed.classList.toggle("hidden", isPassword);
+            });
+        });
+    </script>
+    <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
     <!-- Plugins JS File -->
     <script src="{{ asset('new-assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('new-assets/js/bootstrap.bundle.min.js') }}"></script>
@@ -504,8 +358,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
 </body>
-
-
-
-
 </html>

@@ -1,20 +1,21 @@
 @extends('layouts.app')
-
+@section('no-header')
+@endsection
 @section('content')
+    <div class="text-center bg-white px-8 sm:px-16 py-8 rounded-2xl  mt-10 mx-auto">
 
-    <div class=" h-100vh min-w-lg min-w-48 mx-auto text-center bg-white px-4 sm:px-8 rounded-xl shadow mt-5">
         <header class="mb-8">
-            <h1 class="text-2xl font-bold mb-1">Enter Verification Code</h1>
+            <h1 class="text-3xl font-bold mb-1">Enter Verification Code</h1>
         </header>
 
         @if (session('status'))
-            <div class="mb-4 text-green-600 font-medium">
+            <div class="mb-2 text-green-600 font-medium">
                 {{ session('status') }}
             </div>
         @endif
 
         @if ($errors->has('otp'))
-            <div class="mb-4 text-red-600 font-medium">
+            <div class="mb-2 text-red-600 font-medium">
                 {{ $errors->first('otp') }}
             </div>
         @endif
@@ -24,28 +25,35 @@
             <div class="flex items-center justify-center gap-3 mb-4" id="otp-inputs">
                 @for ($i = 0; $i < 6; $i++)
                     <input type="text" name="otp_digit[]" maxlength="1" inputmode="numeric"
-                        class="  form-control text-center fw-bold fs-4 otp-box"
-                        style="width: 50px; height: 60px; border: 2px solid #ced4da; border-radius: 8px;" required />
+                        class="form-control text-center fw-bold fs-4 otp-box"
+                        style="width: 60px; height: 70px; border: 2px solid #ced4da;  border-radius: 12px;
+                   font-size: 2.2rem; font-weight: 600; color: #111827; letter-spacing: 1px;"
+                        required />
                 @endfor
             </div>
-            <div class="text-center ">
-                <button type="submit"
-                    class="px-4 py-2 mb-2 rounded-md bg-indigo-600 text-white  min-w-96">{{ __('Next') }}</button>
+            <div class="text-center">
+                <button type="submit" class="px-4 py-3 mb-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 w-[400px]">
+                    {{ __('Next') }}
+                </button>
             </div>
-
         </form>
-        <div class="text-sm text-slate-500 mb-4">
-            <span id="countdown">Please wait 60 seconds to resend</span>
+
+        {{-- Countdown + resend --}}
+        <div class="text-md text-slate-500 mb-4">
+            <span id="countdown" @if ($remaining <= 0) style="display:none;" @endif>
+                Please wait {{ $remaining }} seconds to resend
+            </span>
             <form id="resend-form" method="POST" action="{{ route('otp.resend') }}">
                 @csrf
-                <button id="resend-btn" type="submit" class="font-medium text-indigo-500 hover:text-indigo-600 d-none">
+                <button id="resend-btn" type="submit"
+                    class="font-medium text-indigo-500 hover:text-blue-600 @if ($remaining > 0) d-none @endif">
                     Resend code
                 </button>
             </form>
         </div>
-
     </div>
 @endsection
+
 <style>
     #otp-inputs .otp-box:focus {
         border-color: #0d6efd;
@@ -53,6 +61,7 @@
         outline: none;
     }
 </style>
+
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -82,69 +91,23 @@
                 });
             });
 
-            // Resend code
+            // === Countdown handling ===
+            let remaining = {{ $remaining }};
             const countdownEl = document.getElementById('countdown');
             const resendBtn = document.getElementById('resend-btn');
-            const resendForm = document.getElementById('resend-form');
 
-            let countdownInterval;
-
-            let endTime = localStorage.getItem('otpCountdownEnd');
-            if (endTime) {
-                endTime = parseInt(endTime, 10);
-            }
-            // else {
-            //     endTime = Date.now() + 60 * 1000; // default 60s if no countdown yet
-            //     localStorage.setItem('otpCountdownEnd', endTime);
-            // }
-
-            function startCountdown() {
-                clearInterval(countdownInterval);
-
-                countdownInterval = setInterval(() => {
-                    const remaining = Math.floor((endTime - Date.now()) / 1000);
-
+            if (remaining > 0) {
+                const interval = setInterval(() => {
+                    remaining--;
                     if (remaining > 0) {
                         countdownEl.textContent = `Please wait ${remaining} seconds to resend`;
-                        countdownEl.style.display = 'inline';
-                        resendBtn.classList.add('d-none'); // hide button
                     } else {
-                        clearInterval(countdownInterval);
+                        clearInterval(interval);
                         countdownEl.style.display = 'none';
-                        resendBtn.classList.remove('d-none'); // show button
-                        localStorage.removeItem('otpCountdownEnd');
+                        resendBtn.classList.remove('d-none');
                     }
                 }, 1000);
             }
-            // Decide what to do on page load
-            if (endTime && Date.now() < endTime) {
-                // countdown still active
-                startCountdown();
-            } else {
-                // countdown expired or never set → show resend button immediately
-                resendBtn.classList.remove('d-none');
-                countdownEl.style.display = 'none';
-                localStorage.removeItem('otpCountdownEnd');
-            }
-
-            // Handle resend button click
-            resendForm.addEventListener('submit', function() {
-                // Reset countdown to 60s only when clicking resend
-                endTime = Date.now() + 60 * 1000;
-                localStorage.setItem('otpCountdownEnd', endTime);
-
-                startCountdown();
-                // Form submits normally → Laravel resends the same OTP
-            });
-
-
-// ✅ When OTP is verified correctly (trigger this in controller response)
-window.addEventListener('otpVerified', function () {
-    localStorage.removeItem('otpCountdownEnd');
-    clearInterval(countdownInterval);
-    countdownEl.style.display = 'none';
-    resendBtn.classList.remove('d-none');
-});
         });
     </script>
 @endpush

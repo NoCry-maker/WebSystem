@@ -23,25 +23,25 @@ use Termwind\Components\Hr;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ForgotPasswordController;
 
 Auth::routes();
 
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
-use App\Http\Controllers\OtpController;
-use App\Http\Controllers\Auth\RegisterController;
-
-Route::get('/verify-register-otp', [OtpController::class, 'showVerifyRegisterForm'])->name('otp.verify.page');
-Route::post('/verify-register-otp', [OtpController::class, 'verifyRegisterOtp'])->name('otp.verify');
+Route::get('/verify/register-otp', [OtpController::class, 'showVerifyRegisterForm'])->name('otp.verify.page');
+Route::post('/verify/register-otp', [OtpController::class, 'verifyRegisterOtp'])->name('otp.verify');
 
 Route::post('otp/resend/register', [OtpController::class, 'resendRegisterOtp'])->name('otp.resend.register');
 //
-use App\Http\Controllers\ForgotPasswordController;
 
 Route::post('/otp/resend', [ForgotPasswordController::class, 'resendOtp'])->name('otp.resend');
 // Submit Email
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showEmailForm'])->name('otp.password.request');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('otp.password.email');
+Route::get('/forgot/password', [ForgotPasswordController::class, 'showEmailForm'])->name('otp.password.request');
+Route::post('/forgot/password', [ForgotPasswordController::class, 'sendOtp'])->name('otp.password.email');
 
 // Verify OTP
 Route::get('/verify-otp', [ForgotPasswordController::class, 'showOtpForm'])->name('otp.verify.form');

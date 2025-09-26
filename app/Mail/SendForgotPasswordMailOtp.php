@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class forgotpassword_email extends Mailable
+class SendForgotPasswordMailOtp extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -28,10 +28,9 @@ class forgotpassword_email extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Code Forgotpassword Email',
+            subject: ' Forgot Password Mail Otp',
         );
     }
-
     /**
      * Get the message content definition.
      */
